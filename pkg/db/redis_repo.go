@@ -37,6 +37,7 @@ func (r *RedisRepo) Set(ctx context.Context, key string, value interface{}, expi
 func (r *RedisRepo) Exists(ctx context.Context, redisKey string) (bool, error) {
 	result, err := r.client.Exists(ctx, redisKey).Result()
 	if err != nil {
+		log.Printf("[redis_repo.go]---[Exists()], Err:%v", err)
 		return false, err
 	}
 

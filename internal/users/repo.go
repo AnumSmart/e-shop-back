@@ -83,7 +83,8 @@ func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*User, 
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, fmt.Errorf("%w: %v", ErrUserNotExists, err)
 		}
-		return nil, fmt.Errorf("failed to query user by email: %w", err)
+		log.Printf("function [FindByEmail], failed to query user by email: %v", err)
+		return nil, errors.New(ErrUserNotExists)
 	}
 
 	return &user, nil

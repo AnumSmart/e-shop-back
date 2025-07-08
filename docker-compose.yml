@@ -7,6 +7,13 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  redisinsight:
+    image: redislabs/redisinsight:1.14.0
+    ports:
+      - '8001:8001'
+    volumes:
+      - redisinsight_data:/db
+
   postgres:
     container_name: postgres_go
     image: postgres:16.4
@@ -22,3 +29,4 @@ services:
 volumes:
   redis_data:
   postgres_data:
+  redisinsight_data:

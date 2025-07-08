@@ -47,7 +47,7 @@ func (s *AuthService) Register(ctx context.Context, email, password string) erro
 	isInBase, _ := s.repo.CheckIfInBaseByEmail(ctx, email)
 
 	if isInBase {
-		return errors.New("User with such Email is in base")
+		return errors.New("user with such Email is in base")
 	}
 
 	// Хеширование пароля
@@ -73,7 +73,6 @@ func (s *AuthService) Login(ctx context.Context, email, password string) error {
 	// Проверяем существует ли пользователь с данным email уже в базе
 	existedUser, err := s.repo.FindByEmail(ctx, email)
 	if err != nil {
-		log.Println(err.Error())
 		return err
 	}
 	if existedUser == nil {
@@ -127,6 +126,7 @@ func (s *AuthService) InvalidateRefreshToken(ctx context.Context, refreshToken s
 
 	// Получаем jti из токена
 	claims, err := jwt_stuff.ParseTokenWithoutVerification(refreshToken)
+	log.Printf("[service.go]---[InvalidateRefreshToken()]---[ParseTokenWithoutVerification()]---err: %v", err)
 	if err != nil {
 		return err
 	}
