@@ -9,17 +9,24 @@ import (
 )
 
 type Config struct {
-	Db   DbConfig
-	Auth AuthConfig
+	Db     DbConfig   // postgres config
+	Reddis RdConfig   // redddis config
+	Auth   AuthConfig // auth jwt config
 }
 
 type DbConfig struct {
 	Dsn string
 }
 
+type RdConfig struct {
+	Addr string // reddis addr from docker-compose
+	Pass string // password
+	NDB  string // BD number
+}
+
 type AuthConfig struct {
-	SecretAcc       string
-	SecretRef       string
+	SecretAcc       string // secret for access token
+	SecretRef       string // secret for refresh token
 	AccessTokenExp  time.Duration
 	RefreshTokenExp time.Duration
 }
@@ -30,7 +37,7 @@ const (
 )
 
 func LoadConfig() *Config {
-	err := godotenv.Load("c:\\Son_Alex\\GO_projects\\e-commerce_proj\\simple_gin_server\\.env")
+	err := godotenv.Load("c:\\Son_Alex\\Go_projects\\e-commerce_proj\\e-shop\\backend\\simple_gin_server\\.env")
 	if err != nil {
 		fmt.Println("Error loading .env file, using default config", err.Error())
 	}
@@ -43,6 +50,11 @@ func LoadConfig() *Config {
 			SecretRef:       os.Getenv("JWT_REF_SECRET"),
 			AccessTokenExp:  timeExpAccessToken,
 			RefreshTokenExp: timeExpRefreshToken,
+		},
+		Reddis: RdConfig{
+			Addr: os.Getenv("REDDIS_ADDR"),
+			Pass: os.Getenv("REDDIS_PASS"),
+			NDB:  os.Getenv("REDDIS_BD"),
 		},
 	}
 }

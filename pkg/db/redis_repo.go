@@ -2,6 +2,9 @@ package db
 
 import (
 	"context"
+	"log"
+	"simple_gin_server/configs"
+	"strconv"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -11,13 +14,17 @@ type RedisRepo struct {
 	client *redis.Client
 }
 
-func NewRedisRepo(addr, password string, db int) *RedisRepo {
+func NewRedisRepo(ctx context.Context, conf *configs.Config) *RedisRepo {
+	reddis_db_n, err := strconv.Atoi(conf.Reddis.NDB)
+	if err != nil {
+		log.Println("Could not read reddis DB number from config")
+	}
 	return &RedisRepo{
 		redis.NewClient(
 			&redis.Options{
-				Addr:     addr,
-				Password: password,
-				DB:       db,
+				Addr:     conf.Reddis.Addr,
+				Password: conf.Reddis.Pass,
+				DB:       reddis_db_n,
 			},
 		),
 	}

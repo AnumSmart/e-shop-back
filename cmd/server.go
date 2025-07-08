@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+
 	"simple_gin_server/configs"
 	"simple_gin_server/internal/auth"
 	"simple_gin_server/internal/users"
@@ -31,13 +32,8 @@ func NewServer(ctx context.Context) *Server {
 		log.Fatal(err)
 	}
 
-	// создаём экземпляр reddis
-
-	redisRepo := db.NewRedisRepo(
-		"redis:6379", // Адрес из docker-compose
-		"",           // Пароль, если есть
-		0,            // Номер БД
-	)
+	// создаём экземпляр reddis, используя config
+	redisRepo := db.NewRedisRepo(ctx, conf)
 
 	// Инициализация слоёв приложения
 	userRepository := users.NewUserRepository(db_pg)
