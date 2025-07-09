@@ -22,7 +22,8 @@ services:
       - 'POSTGRES_PASSWORD=${PG_PASSWORD}'
       - 'POSTGRES_DB=${PG_DATABASE_NAME}'
     volumes:
-      - ./postgres_data:/data/postgres
+      - postgres_data:/var/lib/postgresql/data # Host-mounted volume
+      - ./migrations:/docker-entrypoint-initdb.d
     ports:
       - '${PG_PORT}:5432'
 

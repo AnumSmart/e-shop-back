@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func NewJWT(secretAcc string, secretRef string, accessTokenExp, refreshTokenExp time.Duration) *JWT {
@@ -48,6 +49,7 @@ func NewClaims(TokenExp time.Duration, email, tokenType, issuer string) CustomCl
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(TokenExp)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    issuer,
+			ID:        uuid.New().String(),
 		},
 	}
 	return newClaim

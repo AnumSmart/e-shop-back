@@ -10,6 +10,11 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+type ReddisRepoInterface interface {
+	Set(ctx context.Context, key string, value interface{}, expiration time.Duration) error
+	Exists(ctx context.Context, redisKey string) (bool, error)
+}
+
 type RedisRepo struct {
 	client *redis.Client
 }

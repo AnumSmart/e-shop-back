@@ -233,4 +233,7 @@ func (h *AuthHandler) LogoutHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "logout failed"})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{"Message": "Refresh token has been added to black list and removed from DB"})
+
 }

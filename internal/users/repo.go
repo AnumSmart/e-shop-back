@@ -172,6 +172,7 @@ func (r *UserRepository) AddRefreshToken(ctx context.Context, email, refreshToke
 	`
 	_, err := r.Database.GetPool().Exec(ctx, query, refreshToken, email)
 	if err != nil {
+		log.Printf("[repo.go]---[AddRefreshToken()]---Err: %v", err)
 		return err
 	}
 

@@ -26,11 +26,11 @@ type ServiceInterface interface {
 
 type AuthService struct {
 	repo      users.UserRepoInterface
-	redisRepo *db.RedisRepo
+	redisRepo db.ReddisRepoInterface
 }
 
 // Конструктор слоя сервис
-func NewAuthService(repo users.UserRepoInterface, redisRepo *db.RedisRepo) *AuthService {
+func NewAuthService(repo users.UserRepoInterface, redisRepo db.ReddisRepoInterface) *AuthService {
 	return &AuthService{
 		repo:      repo,
 		redisRepo: redisRepo,
@@ -137,7 +137,8 @@ func (s *AuthService) InvalidateRefreshToken(ctx context.Context, refreshToken s
 	}
 
 	// Вычисляем оставшееся время жизни токена
-	ttl := time.Until(time.Unix(int64(claims.ExpiresAt.Second()), 0))
+	ttl := time.Until(claims.ExpiresAt.Time) // Верный способ для jwt.NumericDate
+	log.Printf("[service.go]---[InvalidateRefreshToken()]---TTL(refresh token): %v", ttl)
 
 	// Сохраняем в Redis
 	key := fmt.Sprintf("refresh_token:%s", claims.ID)
